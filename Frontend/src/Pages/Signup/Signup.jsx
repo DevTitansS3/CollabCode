@@ -1,141 +1,188 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FormInput, Submit } from '../../Components';
-import { useFirebase } from '../../Context/FirebaseContext';
-import { updateProfile } from "firebase/auth";
-import { auth } from "../../firebase";
-import { useDispatch } from 'react-redux';
-import { setUsername as setReduxUsername } from '../../../features/userSlice';
-import {axiosInstance} from '../../../utils/index';
+"use client"
 
-const Signup = () => {
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useFirebase } from "../../Context/FirebaseContext"
+import { updateProfile } from "firebase/auth"
+import { auth } from "../../firebase"
+import { useDispatch } from "react-redux"
+import { setUsername as setReduxUsername } from "../../../features/userSlice"
+import { axiosInstance } from "../../../utils/index"
+
+const SignUp = () => {
   const firebase = useFirebase()
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let isDisabled = true;
+    const { name, value } = e.target
+    let isDisabled = true
     switch (name) {
-      case 'username':
-        setUsername(value);
-        isDisabled = value === '' || email === '' || password === '' || password.length < 6;
-        break;
-      case 'email':
-        setEmail(value);
-        isDisabled = username === '' || value === '' || password === '' || password.length < 6;
-        break;
-      case 'password':
-        setPassword(value);
-        isDisabled = username === '' || email === '' || value === '' || value.length < 6;
-        break;
+      case "username":
+        setUsername(value)
+        isDisabled = value === "" || email === "" || password === "" || password.length < 6
+        break
+      case "email":
+        setEmail(value)
+        isDisabled = username === "" || value === "" || password === "" || password.length < 6
+        break
+      case "password":
+        setPassword(value)
+        isDisabled = username === "" || email === "" || value === "" || value.length < 6
+        break
       default:
-        break;
+        break
     }
-    setIsButtonDisabled(isDisabled);
-  };
+    setIsButtonDisabled(isDisabled)
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (password.length < 6) {
-      alert('Password should be at least 6 characters long');
-      setIsButtonDisabled(false); // Re-enable the button
-      return; // Exit the function
+      alert("Password should be at least 6 characters long")
+      setIsButtonDisabled(false)
+      return
     }
 
     try {
-      await firebase.signupUserwithEmailAndPassword(email, password);
-      const user = auth.currentUser;
+      await firebase.signupUserwithEmailAndPassword(email, password)
+      const user = auth.currentUser
       if (user) {
-        await updateProfile(user, { displayName: username });
-        dispatch(setReduxUsername(user.displayName)); // Dispatch the updated username to Redux store
+        await updateProfile(user, { displayName: username })
+        dispatch(setReduxUsername(user.displayName))
 
-        const result= await axiosInstance.post('/api/v1/auth/register',{name: username,email: user.email,uid: user.uid});
-        console.log(result);
-        navigate('/signin'); // Redirect to sign-in page
+        const result = await axiosInstance.post("/api/v1/auth/register", {
+          name: username,
+          email: user.email,
+          uid: user.uid,
+        })
+        console.log(result)
+        navigate("/signin")
       }
     } catch (error) {
-      console.error('Error signing up:', error.message);
-      alert('Something went wrong');
-      setIsButtonDisabled(false); // Re-enable the button if signup fails
+      console.error("Error signing up:", error.message)
+      alert("Something went wrong")
+      setIsButtonDisabled(false)
     }
-  };
+  }
 
   const signinwithgoogle = async () => {
     try {
-        const userCredential = await firebase.signInUserWithGoogle();
-        const { email, uid, displayName } = userCredential.user;
-        console.log(displayName, email, uid);
-        const result = await axiosInstance.post('/api/v1/auth/register', { name: displayName, email, uid });
-        navigate('/dashboard'); // Redirect to the dashboard page
+      const userCredential = await firebase.signInUserWithGoogle()
+      const { email, uid, displayName } = userCredential.user
+      console.log(displayName, email, uid)
+      const result = await axiosInstance.post("/api/v1/auth/register", {
+        name: displayName,
+        email,
+        uid,
+      })
+      navigate("/dashboard")
     } catch (error) {
-        console.error('Error signing up with Google:', error.message);
+      console.error("Error signing up with Google:", error.message)
     }
-};
-
+  }
 
   return (
-    <section className='h-full flex justify-center items-center flex-col gap-6 place-items-center bg-transparent'>
-      <h1 className="text-4xl md:text-6xl tracking-tight font-bold text-transparent bg-clip-text bg-gradient-to-bl from-zinc-800 via-slate-200 to-zinc-900 h-20">Sign Up</h1>
-      <div className='card w-2/5 bg-base-100 shadow-2xl flex flex-col gap-y-4 p-10'>
-        <div className='flex gap-3 flex-col'>
-          <form onSubmit={handleSubmit}>
-            <FormInput
-              type='text'
-              label='Enter your User name:'
-              name='username'
-              value={username}
-              onChange={handleInputChange}
-              placeholder='Enter your username'
-            />
-            <FormInput
-              type='email'
-              label='Enter Your Email:'
-              name='email'
-              value={email}
-              onChange={handleInputChange}
-              placeholder='name@email.com'
-            />
-            <FormInput
-              type='password'
-              label='Password:'
-              name='password'
-              value={password}
-              onChange={handleInputChange}
-              placeholder='Enter your password'
-            />
-            <div className='mt-4 flex flex-col gap-3'>
-              <Submit text={'Sign up'} disabled={isButtonDisabled} />
-            </div>
-          </form>
-          <div className="flex items-center mb-2">
-            <div className="w-full h-px bg-gray-600"></div>
-            <div className="text-center text-gray-500 px-5 text-sm font-bold">Or</div>
-            <div className="w-full h-px bg-gray-600"></div>
-          </div>
-          <button className='btn w-full' onClick={signinwithgoogle}>
-            <span className='flex gap-4 items-center'>
-              <img src="./google-color.svg" alt="" className='w-6 h-6' />
-              <h1>Sign up with Google</h1>
-            </span>
-          </button>
+    <main className="min-h-screen w-full bg-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-8 p-8 bg-zinc-900 rounded-xl shadow-2xl">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-white">Create an account</h1>
+          <p className="mt-2 text-sm text-zinc-400">Join us today and get started</p>
         </div>
-        <p className='text-center'>
-          Already have an account? {' '}
-          <Link
-            to='/signin'
-            className='ml-2 link link-hover link-primary capitalize'
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-zinc-300">
+                Username
+              </label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                value={username}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white shadow-sm placeholder-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
+                placeholder="Enter your username"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white shadow-sm placeholder-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
+                placeholder="name@example.com"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white shadow-sm placeholder-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
+                placeholder="Enter your password"
+              />
+              <p className="mt-1 text-xs text-zinc-500">Must be at least 6 characters long</p>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isButtonDisabled}
+            className="w-full py-2.5 px-4 text-sm font-semibold rounded-lg bg-zinc-100 text-black hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500 focus:ring-offset-zinc-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
+            Create account
+          </button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-zinc-700"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-zinc-900 text-zinc-400">Or continue with</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={signinwithgoogle}
+            className="w-full flex items-center justify-center gap-3 py-2.5 px-4 text-sm font-semibold rounded-lg bg-zinc-800 text-white hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500 focus:ring-offset-zinc-900 transition-colors"
+          >
+            <img src="./google-color.svg" alt="Google logo" className="w-5 h-5" />
+            Sign up with Google
+          </button>
+        </form>
+
+        <p className="mt-4 text-center text-sm text-zinc-400">
+          Already have an account?{" "}
+          <Link to="/signin" className="font-medium text-zinc-300 hover:text-white transition-colors">
             Sign in
           </Link>
         </p>
       </div>
-    </section>
-  );
+    </main>
+  )
 }
 
-export default Signup;
+export default SignUp
+
