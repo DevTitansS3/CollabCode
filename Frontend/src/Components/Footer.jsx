@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="footer p-10 bg-neutral text-neutral-content">
+    <footer className="footer p-10 bg-transparent text-neutral-content">
       <aside>
         <Link to="/" className="flex items-center">
-          <img src="./images/logo.png" className=' h-10 w-16' alt="" />
-          <span className=' font-extrabold text-2xl text-white'>CodeUnity</span>
+          <img src="/red.svg" className="h-8 w-10" alt=" Logo" />
+          <span className=' font-extrabold text-2xl text-white'>CollabCode</span>
         </Link>
-        <p>ACME Industries Ltd.<br />Providing reliable tech since 1992</p>
+        {/* <p>ACME Industries Ltd.<br />Providing reliable tech since 1992</p> */}
       </aside>
       <nav>
         <h6 className="footer-title">Social</h6>

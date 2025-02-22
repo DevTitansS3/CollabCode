@@ -31,7 +31,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between py-4">
           <Link to="/" className="flex items-center space-x-2">
-            <img src="./images/logo.png" className="h-8 w-10" alt="CodeUnity Logo" />
+            <img src="/red.svg" className="h-8 w-10" alt=" Logo" />
             <span className="text-2xl font-bold text-zinc-100 font-heading">CollabCode</span>
           </Link>
 

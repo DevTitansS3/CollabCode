@@ -16,7 +16,7 @@ const SideBox = () => {
                <li>
                   <Link
                      to="/dashboard"
-                     class={`flex items-center p-2 rounded text-base-content group ${location.pathname === '/dashboard' ? 'bg-base-100' : ' hover:bg-base-200'
+                     class={`flex items-center p-2 rounded text-base-content group ${location.pathname === '/dashboard' ? 'bg-base-100' : ' hover:bg-base-200 text-white'
                         }`}
 
                   >
