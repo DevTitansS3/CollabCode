@@ -4,7 +4,7 @@ import ChatUi from './ChatUi';
 // import Call from './Call';
 import { useSelector } from 'react-redux';
 import AIChat from './AiChat';
-// import Canvas from './Canvas/Canvas';
+import Canvas from './Canvas/Canvas';
 
 const EditorNav = ({socketRef}) => {
   const selectedTeam = useSelector(state => state.meeting.selectedTeam);
