@@ -1,169 +1,128 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faBars, faSignOut } from '@fortawesome/free-solid-svg-icons';
-import AvatarCom from './AvatarCom';
-import { useFirebase } from '../Context/FirebaseContext';
-import Themetoggler from './Themetoggler'
+"use client"
 
-export default function Header() {
- 
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+import { useState, useEffect } from "react"
+import { Link, NavLink } from "react-router-dom"
+import { Menu, X, ArrowUpRight } from "lucide-react"
+import { useFirebase } from "../Context/FirebaseContext"
+import AvatarCom from "./AvatarCom"
 
-  const { user, signoutUser } = useFirebase();
-
-  const toggleMobileNav = () => {
-    setIsMobileNavOpen(!isMobileNavOpen);
-  };
-
-  const [isScrolled, setIsScrolled] = useState(false);
+const Navbar = () => {
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const { user } = useFirebase()
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 0);
-    };
+      setIsScrolled(window.scrollY > 0)
+    }
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-
-
-
+  const toggleMobileNav = () => {
+    setIsMobileNavOpen(!isMobileNavOpen)
+  }
 
   return (
-    <header className="sticky z-50 top-0 flex flex-col ">
-      <nav className={`px-4 lg:px-6 py-2.5 text-xl ${isScrolled ? 'glass' : 'bg-base-300 '}`}>
-
-        <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <Link to="/" className="flex items-center">
-            <img src="./images/logo.png" className=' h-10 w-16' alt="" />
-            <span className=' font-extrabold text-2xl text-white font-heading'>CodeUnity</span>
+    <header
+      className={` px-14 sticky top-0 z-50 w-full transition-colors duration-300 ${isScrolled ? "bg-black/40 backdrop-blur-sm" : "bg-transparent"}`}
+    >
+      <div className="container mx-auto px-4">
+        <nav className="flex items-center justify-between py-4">
+          <Link to="/" className="flex items-center space-x-2">
+            <img src="./images/logo.png" className="h-8 w-10" alt="CodeUnity Logo" />
+            <span className="text-2xl font-bold text-zinc-100 font-heading">CollabCode</span>
           </Link>
-          <span onClick={toggleMobileNav}
-            className=' absolute left-5'>
-            {/* <FontAwesomeIcon icon={faBars} className="md:hidden" /> */}
-          </span>
-          {user ? (
 
-            <div className="flex items-center lg:order-2 gap-5">
-
-              <AvatarCom />
-              {/* <Themetoggler/> */}
-            </div>
-
-
-          ) : (
-            <div className="flex items-center lg:order-2">
-              <Link
-                to="/signin"
-                className="text-gray-800 bg-gray-50 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none font-sans"
-              >
-                <div className='w-16 justify-between flex'>
-                  <span><FontAwesomeIcon icon={faUserPlus} /></span>
-                  <h3>Log in</h3>
-                </div>
-              </Link>
-              <Link
-                to="/signup"
-                className=' btn bg-primary-content'
-              >
-                <h3>Sign Up</h3>
-              </Link>
-            </div>
-          )}
-
-          <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-              <li>
-                <NavLink
-                  to="/"
-                  className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-primary-1250" : "text-white"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0`
-                  }
-                  activeClassName="text-primary-1250"
-                >
-                  Home
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/about"
-                  className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-primary-1250" : "text-white"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0`
-                  }
-                >
-                  How to use
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/dashboard"
-                  className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-primary-1250" : "text-white"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0`
-                  }
-                  activeClassName="text-primary-1250"
-                >
-                  Get Started
-                </NavLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Navbar */}
-      <div className={`lg:hidden ${isMobileNavOpen ? 'block' : 'hidden'} bg-gray-800 relative z-20 `}>
-        <ul className="flex flex-col  font-medium lg:flex-row lg:space-x-8 lg:mt-0 ">
-          <li>
+          <div className="hidden md:flex items-center space-x-8">
             <NavLink
               to="/"
-              className="block py-2 pr-4 pl-3 duration-200 text-gray-700 border-b hover:bg-gray-700 border-gray-100  lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0"
-              activeClassName="text-primary-1250"
+              className={({ isActive }) =>
+                `text-lg font-medium ${isActive ? "text-zinc-100" : "text-zinc-400"} hover:text-zinc-100 transition-colors`
+              }
+            >
+              Home
+            </NavLink>
+            {/* <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                `text-sm font-medium ${isActive ? "text-zinc-100" : "text-zinc-400"} hover:text-zinc-100 transition-colors`
+              }
+            >
+              How to use
+            </NavLink> */}
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                `text-lg font-medium ${isActive ? "text-zinc-100" : "text-zinc-400"} hover:text-zinc-100 transition-colors`
+              }
+            >
+              Get Started
+            </NavLink>
+          </div>
+
+          <div className="flex items-center space-x-8">
+            {user ? (
+              <AvatarCom />
+            ) : (
+              <>
+                <Link to="/signin" className="text-sm font-medium text-zinc-100 hover:text-zinc-200 transition-colors">
+                  Log in
+                </Link>
+                <Link
+                  to="/signup"
+                  className="group relative px-4 py-2 text-sm font-medium text-black bg-zinc-100 rounded-lg hover:bg-zinc-200 transition-colors"
+                >
+                  Sign Up
+                  <ArrowUpRight className="inline-block ml-1 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </Link>
+              </>
+            )}
+            <button onClick={toggleMobileNav} className="md:hidden text-zinc-100 hover:text-zinc-200 transition-colors">
+              {isMobileNavOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isMobileNavOpen && (
+        <div className="md:hidden bg-zinc-900 border-t border-zinc-800">
+          <div className="container mx-auto px-4 py-4 space-y-4">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `block text-sm font-medium ${isActive ? "text-zinc-100" : "text-zinc-400"} hover:text-zinc-100 transition-colors`
+              }
               onClick={toggleMobileNav}
             >
               Home
             </NavLink>
-          </li>
-          <li>
             <NavLink
               to="/about"
-              className="block py-2 pr-4 pl-3 duration-200 text-gray-700 border-b hover:bg-gray-700 border-gray-100  lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0"
-              activeClassName="text-primary-1250"
+              className={({ isActive }) =>
+                `block text-sm font-medium ${isActive ? "text-zinc-100" : "text-zinc-400"} hover:text-zinc-100 transition-colors`
+              }
               onClick={toggleMobileNav}
             >
-              Features
+              How to use
             </NavLink>
-          </li>
-          <li>
             <NavLink
-              to="/product"
-              className="block py-2 pr-4 pl-3 duration-200 text-gray-700 border-b hover:bg-gray-700 border-gray-100 lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0"
-              activeClassName="text-primary-1250"
+              to="/dashboard"
+              className={({ isActive }) =>
+                `block text-sm font-medium ${isActive ? "text-zinc-100" : "text-zinc-400"} hover:text-zinc-100 transition-colors`
+              }
               onClick={toggleMobileNav}
             >
               Get Started
             </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/contactUs"
-              className="block py-2 pr-4 pl-3 duration-200 text-gray-700 border-b hover:bg-gray-700 border-gray-100  lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0"
-              activeClassName="text-primary-1250"
-              onClick={toggleMobileNav}
-            >
-              Contact Us
-            </NavLink>
-          </li>
-        </ul>
-
-      </div>
-      <hr />
+          </div>
+        </div>
+      )}
     </header>
-  );
+  )
 }
+
+export default Navbar
+
