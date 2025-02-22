@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRobot } from "@fortawesome/free-solid-svg-icons";
+import { faPalette } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { selectMeetingId } from "../../../features/meetingSlice";
 import { Tldraw } from 'tldraw'
@@ -16,11 +16,11 @@ function Canvas({ socketRef }) {
     <>
       <div>
         <button
-          className="btn bg-secondary-dark text-white"
+          className="btn bg-accent text-white"
           onClick={() => document.getElementById("my_modal_2").showModal()}
         >
           Canvas
-          <FontAwesomeIcon icon={faRobot} />
+          <FontAwesomeIcon icon={faPalette} />
         </button>
 
         <dialog

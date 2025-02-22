@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Editor } from "@monaco-editor/react";
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
@@ -396,7 +397,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                     className={language === 'python' ? 'font-bold text-blue-500' : ''}
                                     onClick={() => {
                                         if (!isHost) {
-                                          console.log('You are not the host. Only the host can change the language.');
+                                            toast.error('Only the host can change the language.');
                                         } else {
                                           onSelectLanguage('python');
                                         }
@@ -415,7 +416,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                     className={language === 'cPlusPlus' ? 'font-bold text-blue-500' : ''}
                                     onClick={() => {
                                         if (!isHost) {
-                                          console.log('You are not the host. Only the host can change the language.');
+                                            toast.error('Only the host can change the language.');
                                         } else {
                                           onSelectLanguage('cPlusPlus');
                                         }
