@@ -46,8 +46,8 @@ const Hero = () => {
               </div>
               <div className="p-6 rounded-xl bg-zinc-900/50 backdrop-blur-sm border border-zinc-800">
                 <Zap className="h-8 w-8 text-zinc-400 mb-4" />
-                <h3 className="text-lg font-semibold text-zinc-200 mb-2">Instant Deploy</h3>
-                <p className="text-zinc-400 text-sm">Deploy your projects with a single click</p>
+                <h3 className="text-lg font-semibold text-zinc-200 mb-2">Saved workspaces</h3>
+                <p className="text-zinc-400 text-sm">Access and view your old codes</p>
               </div>
             </div>
 
