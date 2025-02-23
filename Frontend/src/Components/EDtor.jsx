@@ -6,7 +6,7 @@ import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faFolderPlus, faComments, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance } from '../../utils/index';
 import { useSelector } from 'react-redux';
 import { selectHostId, selectMeetingId, selectMeetingName } from '../../features/meetingSlice';
@@ -39,6 +39,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
     const isHost = ((userId === hostId) || selectedTeam === 'solo');
     const teamMembers = useSelector(state => state.meeting.team);
     const [host, setHost] = useState('');
+    const [showMenu, setShowMenu] = useState(false);
 
 
     const showTeamMembers = async () => {
@@ -321,12 +322,28 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                                         </div>
                                                     </div>
                                                     {userId === host && member.id !== userId && (
+                                                        <div className="relative">
                                                         <button
-                                                            className="p-1 rounded bg-red-600 hover:bg-red-700 transition-colors relative top-1 right-0"
-                                                            onClick={() => removeTeamMembers(member.id)}
+                                                          className="p-1 rounded transition-colors"
+                                                          onClick={() => setShowMenu((prev) => !prev)}
                                                         >
-                                                            <FontAwesomeIcon icon={faCircleXmark} className="w-3 h-3 text-white" />
+                                                          <FontAwesomeIcon icon={faEllipsisVertical} className="w-4 h-4 text-gray-400 hover:text-gray-600" />
                                                         </button>
+                                                  
+                                                        {showMenu && (
+                                                          <div className="absolute right-0 mt-1 w-24 bg-white border border-gray-200 rounded shadow-lg z-10">
+                                                            <button
+                                                              className="w-full px-2 py-1 text-sm text-red-600 hover:bg-red-100 rounded"
+                                                              onClick={() => {
+                                                                removeTeamMembers(member.id);
+                                                                setShowMenu(false); // Close the menu after removing
+                                                              }}
+                                                            >
+                                                              Remove
+                                                            </button>
+                                                          </div>
+                                                        )}
+                                                      </div>
                                                     )}
                                                 </div>
                                             ))}

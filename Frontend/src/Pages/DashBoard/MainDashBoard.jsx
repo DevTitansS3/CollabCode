@@ -53,7 +53,7 @@ const MainDashBoard = () => {
                 <Link to='/dashboard/help' className='feature-card'>
                     <div className="p-8 bg-gradient-to-b from-secondary to-secondary-dark text-secondary-content rounded-lg shadow-md hover:shadow-lg transition">
                         <h2 className="text-2xl font-bold mb-4">Help and Support</h2>
-                        <p>Get assistance whenever you need it.uiuiuiiuiiuiuiui</p>
+                        <p>Get assistance whenever you need it, quickly and easily.</p>
                     </div>
                 </Link>
 

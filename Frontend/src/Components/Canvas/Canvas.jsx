@@ -11,7 +11,6 @@ function Canvas({ socketRef }) {
   const meetingId = useSelector(selectMeetingId);
   const store = useSyncDemo({ roomId: meetingId })
 
-  
   return (
     <>
       <div>
