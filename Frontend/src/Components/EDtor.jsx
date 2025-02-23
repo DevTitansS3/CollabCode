@@ -227,142 +227,163 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
 
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay " onClick={toggleDrawer}></label>
                     <div className="menu  w-72  bg-base-200 text-base-content flex gap-4 h-full items-center ">
-                        <div className=' overflow-y-auto h-2/3 p-1 overflow-x-hidden'>
-                            {/* Sidebar content here */}
-                            <div className=' '>
-                                {teamType === 'team' && (<li>
+                        <div className="drawer min-h-screen absolute top-4 left-10 lg:w-1/2 w-full overflow-y-auto">
+                            <input id="my-drawer" type="checkbox" className="drawer-toggle" checked={isDrawerOpen} onChange={toggleDrawer} />
 
-                                    <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
+                            {/* Drawer Toggle Button */}
+                            <div className="absolute top-4 left-4 border-2 border-red-700">
+                                <label
+                                    className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-900 hover:bg-gray-800 cursor-pointer transition-colors border-2 border-red-700"
+                                    htmlFor="my-drawer"
+                                >
+                                    {isDrawerOpen ? (
+                                        <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    ) : (
+                                        <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                        </svg>
+                                    )}
+                                </label>
+                            </div>
 
-                                        Meeting Id :
-                                        <pre className=' text-base-content font-light text-xs'>(Share with your friends to invite them) </pre>
-                                    </h1>
-
-
-                                    <input type="text" value={meetId ? ` ${meetId}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-sm" />
-                                    <button
-                                        className="absolute left-52  top-16 mt-2 text-center bg-transparent "
-                                        onClick={copyToClipboard}
-                                    >
-                                        {copied ? (
-                                            <div className="flex items-center justify-center h-full bg-transparent">
-                                                <svg
-                                                    className="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 mr-1 bg-transparent"
-                                                    aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 16 12"
-                                                >
-                                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5" />
-                                                </svg>
-                                                <span className="text-sm font-medium">Copied!</span>
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center justify-center h-full">
-                                                <svg
-                                                    className="w-3.5 h-3.5"
-                                                    aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 18 20"
-                                                >
-                                                    <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
-                                                </svg>
-
+                            {/* Sidebar Content */}
+                            <div
+                                className={`fixed w-full top-0 left-0 max-h-screen h-[650px]  transform transition-transform duration-300 ease-in-out  ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"
+                                    } bg-gray-900 text-gray-300 shadow-xl`}
+                            >
+                                <div className="flex flex-col h-full">
+                                    {/* Meeting Info Section */}
+                                    <div className="p-4 space-y-4">
+                                        {teamType === "team" && (
+                                            <div className="space-y-2">
+                                                <div className="space-y-1">
+                                                    <h2 className="text-sm font-medium text-gray-400">Meeting ID</h2>
+                                                    <div className="relative">
+                                                        <input
+                                                            type="text"
+                                                            value={meetId ? ` ${meetId}` : "No meeting ID set"}
+                                                            readOnly
+                                                            className="w-full px-3 py-2 text-sm bg-gray-800 rounded border border-gray-700 focus:outline-none"
+                                                        />
+                                                        <button
+                                                            onClick={copyToClipboard}
+                                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                                                        >
+                                                            {copied ? (
+                                                                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path
+                                                                        fillRule="evenodd"
+                                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                        clipRule="evenodd"
+                                                                    />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                                                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                                                </svg>
+                                                            )}
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
-                                    </button>
-                                </li>)}
-                                <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
-                                <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
-                            </div>
 
-                            {/* <hr className=' mt-6' /> */}
-
-                            <div className='  flex flex-col h-auto p-3 gap-3 mt-6 bg-base-300 '>
-                                {
-                                    teamMembers?.map(member => (
-
-                                        <li className={`rounded-lg bg-base-100 flex flex-row items-center justify-center gap-1 p-3 ${member.status === 'online' ? 'border-green-500 border-4' : 'border-gray-500 border-4 '}`}>
-                                            <span>
-                                                {/* <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /> */}
-                                                <Avatar name={member.username} className="dropdown" size="50" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8} src={member.photoUrl || ''} />
-
-
-                                            </span>
-                                            <h1 className='flex gap-1 flex-wrap justify-center items-center'>
-                                                <span>{member.username}</span>
-                                                <span>
-                                                    {member.id === userId && (
-                                                        /* Content to render if member.id equals userId */
-                                                        <span>(You)</span>
-                                                    )}
-                                                </span>
-
-                                            </h1>
-                                            {
-                                                member.id === host && (
-
-                                                    <span className=' font-bold tetx-lg text-green-600'>(Host)</span>
-
-                                                )
-                                            }
-                                            {userId === host && member.id != userId && (
-                                                <button className=' btn bg-red-600' onClick={() => removeTeamMembers(member.id)}>Remove<span className=' text-white text-lg'><FontAwesomeIcon icon={faCircleXmark} /></span></button>
-                                            )}
-
-                                        </li>
-                                    ))
-                                }
-
-                            </div>
-
-
-                        </div>
-
-                        <div class="flex flex-col">
-                            <div class="flex-1">
-                                <li>
-                                    <button class='btn bg-red-600 w-60' onClick={handleLeaveRoom}>Leave Room</button>
-                                </li>
-                            </div>
-
-                            {teamType === 'team' && (<div class="my-2 flex items-center">
-                                <span class="block w-full border-t border-gray-300 my-4"></span>
-
-                                <span class="mx-4">or</span>
-                                <span class="block w-full border-t border-gray-300 my-4"></span>
-
-                            </div>)}
-
-                            {teamType === 'team' && (<div class="flex-1">
-                                <li>
-                                    {/* Open the modal using document.getElementById('ID').showModal() method */}
-                                    <button className="btn bg-red-600 w-60" onClick={() => document.getElementById('my_modal_1').showModal()}>Leave WorkSpace</button>
-                                    <dialog id="my_modal_1" className="modal">
-                                        <div className="modal-box absolute top-44 w-1/3 h-64  flex flex-col gap-0 overflow-hidden">
-                                            <div className=" mt-4 flex justify-center items-center"><img src="/images/warning.png" className=' w-12 h-12' alt="" /></div>
-                                            <div className='  flex flex-col justify-center items-center '>
-                                                <h1 className=' font-extrabold text-2xl text-red-700 text-center '>Warning</h1>
-                                                <p className=' text-center text-lg'>
-                                                    Once you exit this workspace, your code will be erased, and you won't be able to retrieve or access it again.
-                                                </p>
-
-                                            </div>
-                                            <div className="modal-action  flex justify-center gap-6">
-                                                <form method="dialog">
-                                                    {/* if there is a button in form, it will close the modal */}
-                                                    <button className="btn w-32 bg-primary text-white">Close</button>
-                                                </form>
-
-                                                <button class='btn bg-red-600 w-32' onClick={handleLeaveWorkspace}>Leave</button>
-                                            </div>
+                                        <div className="space-y-1">
+                                            <h2 className="text-sm font-medium text-gray-400">Meeting Name</h2>
+                                            <input
+                                                type="text"
+                                                value={meetName ? `${meetName}` : "No meeting name set"}
+                                                readOnly
+                                                className="w-full px-3 py-2 text-sm bg-gray-800 rounded border border-gray-700 focus:outline-none"
+                                            />
                                         </div>
-                                    </dialog>
-                                    {/* <button class='btn bg-red-600 w-60' onClick={handleLeave}>Leave WorkSpace</button> */}
-                                </li>
-                            </div>)}
+                                    </div>
+
+                                    {/* Team Members List */}
+                                    <div className="flex-1 overflow-y-auto px-4 py-2">
+                                        <div className="space-y-2">
+                                            {teamMembers?.map((member) => (
+                                                <div
+                                                    key={member.id}
+                                                    className={`p-2 rounded-lg bg-gray-800 flex items-center gap-2 border ${member.status === "online" ? "border-green-600" : "border-gray-600"
+                                                        }`}
+                                                >
+                                                    <Avatar name={member.username} size="32" round={true} src={member.photoUrl || ""} />
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center gap-1">
+                                                            <span className="text-sm truncate">{member.username}</span>
+                                                            {member.id === userId && <span className="text-xs text-gray-400">(You)</span>}
+                                                            {member.id === host && <span className="text-xs text-green-500">(Host)</span>}
+
+                                                        </div>
+                                                    </div>
+                                                    {userId === host && member.id !== userId && (
+                                                        <button
+                                                            className="p-1 rounded bg-red-600 hover:bg-red-700 transition-colors relative top-1 right-0"
+                                                            onClick={() => removeTeamMembers(member.id)}
+                                                        >
+                                                            <FontAwesomeIcon icon={faCircleXmark} className="w-3 h-3 text-white" />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Footer Actions */}
+                                    <div className="p-4 space-y-3 border-t border-gray-800 ">
+                                        <button
+                                            onClick={handleLeaveRoom}
+                                            className="w-full py-2 bg-red-600 hover:bg-red-700 rounded text-sm font-medium transition-colors"
+                                        >
+                                            Leave Room
+                                        </button>
+
+                                        {teamType === "team" && (
+                                            <>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex-1 h-px bg-gray-800" />
+                                                    <span className="text-xs text-gray-500">or</span>
+                                                    <div className="flex-1 h-px bg-gray-800" />
+                                                </div>
+
+                                                <button
+                                                    onClick={() => document.getElementById("my_modal_1").showModal()}
+                                                    className="w-full py-2 bg-red-600 hover:bg-red-700 rounded text-sm font-medium transition-colors"
+                                                >
+                                                    Leave Workspace
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        {/* Leave Workspace Modal - Keeping the existing modal code */}
+                        <dialog id="my_modal_1" className="modal">
+                            <div className="modal-box absolute top-44 w-1/3 h-72  flex flex-col gap-0 overflow-hidden">
+                                <div className=" mt-4 flex justify-center items-center"><img src="/images/warning.png" className=' w-12 h-12' alt="" /></div>
+                                <div className='  flex flex-col justify-center items-center '>
+                                    <h1 className=' font-extrabold text-2xl text-red-700 text-center '>Warning</h1>
+                                    <p className=' text-center text-lg'>
+                                        Once you exit this workspace, your code will be erased, and you won't be able to retrieve or access it again.
+                                    </p>
+
+                                </div>
+                                <div className="modal-action  flex justify-center gap-6">
+                                    <form method="dialog">
+                                        {/* if there is a button in form, it will close the modal */}
+                                        <button className="btn w-32 bg-primary text-white">Close</button>
+                                    </form>
+
+                                    <button class='btn bg-red-600 w-32' onClick={handleLeaveWorkspace}>Leave</button>
+                                </div>
+                            </div>
+                        </dialog>
 
                     </div>
                 </div>
@@ -399,11 +420,11 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                         if (!isHost) {
                                             toast.error('Only the host can change the language.');
                                         } else {
-                                          onSelectLanguage('python');
+                                            onSelectLanguage('python');
                                         }
-                                      }}
-                                      
-                                    >
+                                    }}
+
+                                >
                                     Python
                                 </button></li>
                                 {/* <li><button
@@ -418,10 +439,10 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                         if (!isHost) {
                                             toast.error('Only the host can change the language.');
                                         } else {
-                                          onSelectLanguage('cPlusPlus');
+                                            onSelectLanguage('cPlusPlus');
                                         }
-                                      }}
-                                    >
+                                    }}
+                                >
                                     C++
                                 </button></li>
                             </ul>

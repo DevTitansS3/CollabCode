@@ -66,8 +66,8 @@ const Newproject = () => {
     const name = workspaceName;
     const fileName = 'topic';
     const language = 'python';
-    const username = user?.displayName; 
-    const photoUrl = user?.photoURL || ''; 
+    const username = user?.displayName;
+    const photoUrl = user?.photoURL || '';
 
     try {
       console.log(userId);
@@ -81,12 +81,12 @@ const Newproject = () => {
       console.log(response);
       const meetingId = response.data.workspace._id;
       dispatch(setMeetingId(meetingId));
-      
+
       navigate(`/editor/${meetingId}`);
     } catch (error) {
       console.error('Error creating workspace:', error.message);
     }
-};
+  };
 
 
   const handleNextStep = async () => {
@@ -120,7 +120,7 @@ const Newproject = () => {
   const joinTeam = async () => {
     try {
       if (code) {
-        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, { meetingId: code, username: user?.displayName, photoUrl: user?.photoURL ,status:'online'});
+        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, { meetingId: code, username: user?.displayName, photoUrl: user?.photoURL, status: 'online' });
         const { team } = response.data.workspace;
         console.log(team);
         dispatch(setTeam(team));
@@ -252,7 +252,7 @@ const Newproject = () => {
               <>
                 <div className="flex flex-col gap-6">
                   <h3 className="font-bold text-lg">Workspace Details</h3>
-                  <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} onKeyDown={handleKeydownTeam} placeholder="Workspace Name ( Atleast 6 characters)" className="input input-bordered input-primary w-full max-w-xs" />
+                  <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} onKeyDown={handleKeydownTeam} placeholder="Workspace Name ( Atleast 6 characters)" className="placeholder:text-sm input input-bordered input-primary w-full max-w-xs" />
                   <button className="btn bg-primary text-primary-content hover:text-white" onClick={handleNextStep} disabled={isDisabled}>Next</button>
                 </div>
               </>

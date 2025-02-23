@@ -99,9 +99,9 @@ const ChatUi = ({ socketRef }) => {
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-          sendMessage(e);
+            sendMessage(e);
         }
-      };
+    };
 
     return (
         <div className="drawer drawer-end relative z-50 w-full">
@@ -109,7 +109,8 @@ const ChatUi = ({ socketRef }) => {
             <div className="drawer-content">
                 {/* Chat button */}
                 <label htmlFor="my-drawer-4" className="drawer-button btn btn-primary" onClick={toggleDrawer}>
-                    <span className='text-2xl'><FontAwesomeIcon icon={faComments} /></span>
+                    <span className='text-sm text-white gap-2 flex justify-center items-center'>
+                        Start Chat<FontAwesomeIcon icon={faComments} className=' text-white ' /></span>
                     {unreadCount > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2">{unreadCount}</span>}
                 </label>
             </div>

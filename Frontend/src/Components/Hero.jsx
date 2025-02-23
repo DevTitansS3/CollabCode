@@ -27,9 +27,10 @@ const Hero = () => {
             </div>
 
             {/* Tagline */}
-            <p className="text-xl md:text-2xl font-medium text-zinc-400">
+            <p className="text-xl md:text-2xl font-medium italic text-blue-400 drop-shadow-lg">
               Empowering Collaboration, Unifying Code.
             </p>
+
 
             {/* Feature highlights */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
